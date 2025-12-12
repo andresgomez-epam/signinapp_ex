@@ -1,4 +1,4 @@
-defmodule Domain.Model.Shared.Common.Validate.Email do
+defmodule Signinapp.Model.Shared.Common.Validate.Email do
   @moduledoc """
   Module that represents an email that only allows valid email formats.
   """

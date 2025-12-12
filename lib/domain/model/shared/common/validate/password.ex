@@ -1,4 +1,4 @@
-defmodule Domain.Model.Shared.Common.Validate.Password do
+defmodule Signinapp.Model.Shared.Common.Validate.Password do
   @moduledoc """
   Module that represents a password that only allows valid password formats:
   - Minimum length of 8 characters

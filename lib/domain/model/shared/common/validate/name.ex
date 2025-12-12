@@ -1,4 +1,4 @@
-defmodule Domain.Model.Shared.Common.Validate.Name do
+defmodule Signinapp.Model.Shared.Common.Validate.Name do
   @moduledoc """
   Module that represents a name string with no further validation.
   """
