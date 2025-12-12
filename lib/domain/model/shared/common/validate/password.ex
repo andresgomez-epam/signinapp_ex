@@ -1,6 +1,7 @@
 defmodule Domain.Model.Shared.Common.Validate.Password do
   @moduledoc """
-  Module that represents an email that only allows valid email formats.
+  Module that represents a password that only allows valid password formats:
+  - Minimum length of 8 characters
   """
 
   defstruct [:value]
