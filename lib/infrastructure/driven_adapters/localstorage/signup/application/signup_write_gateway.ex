@@ -9,6 +9,7 @@ defmodule Signinapp.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGa
   alias SigninappEx.Domain.Model.Shared.Common.Validate.Name
   alias SigninappEx.Domain.Model.Shared.Cqrs.ContextData
   alias SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Domain.UserEntity
+  alias SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.UserStore
 
   def sign_up(
         %Command{
@@ -21,7 +22,8 @@ defmodule Signinapp.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGa
         } = command
       ) do
     user_entity = %UserEntity{email: email, password: password, name: name}
-    # repo.save(user_entity)
+    # Persist user in in-memory store
+    :ok = UserStore.put(user_entity)
     Logger.info("Gateway command: #{inspect(command)}")
     Logger.info("Saved user: #{inspect(user_entity)}")
 

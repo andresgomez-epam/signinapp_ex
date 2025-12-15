@@ -36,6 +36,8 @@ defmodule SigninappEx.Application do
   end
 
   def env_children(_other_env, _config) do
-    []
+    [
+      {SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.UserStore, []}
+    ]
   end
 end
