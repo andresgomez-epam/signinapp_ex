@@ -7,7 +7,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
 
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Command
   alias SigninappEx.Domain.Model.Signup.Model.SignupDto
-  alias SigninappEx.Domain.Model.Shared.Cqrs.ContextData
+  alias SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData
 
   @sign_up_write_gateway Application.compile_env!(:signinapp_ex, :sign_up_write_gateway)
 
@@ -18,6 +18,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
         } = command
       ) do
     Logger.info("Usecase command: #{inspect(command)}")
+    
     @sign_up_write_gateway.sign_up(command)
   end
 end

@@ -1,4 +1,4 @@
-defmodule SigninappEx.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils do
+defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils do
   require Logger
 
   @moduledoc """

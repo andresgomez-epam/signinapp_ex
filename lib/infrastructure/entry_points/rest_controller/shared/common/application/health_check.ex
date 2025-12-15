@@ -1,4 +1,4 @@
-defmodule SigninappEx.Infrastructure.EntryPoint.RestController.Shared.Common.Application.HealthCheck do
+defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.HealthCheck do
   @moduledoc """
   SigninappEx health check
   """

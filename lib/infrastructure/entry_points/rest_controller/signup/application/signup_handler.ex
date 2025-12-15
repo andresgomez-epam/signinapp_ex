@@ -1,8 +1,8 @@
-defmodule SigninappEx.EntryPoints.RestController.Signup.Application.SignupHandler do
-  alias SigninappEx.Shared.ResponseController
-  alias SigninappEx.Infrastructure.EntryPoint.Shared.ResponseSuccessBody
-  alias SigninappEx.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils
-  alias SigninappEx.EntryPoints.RestController.Signup.Infra.SignupBuild
+defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Application.SignupHandler do
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseController
+  alias SigninappEx.Infrastructure.EntryPoints.Shared.ResponseSuccessBody
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Infra.SignupBuild
   alias SigninappEx.Domain.UseCases.Signup.SignupUseCase
 
   use Plug.Router

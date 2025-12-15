@@ -1,5 +1,5 @@
-defmodule SigninappEx.Infrastructure.EntryPoint.RestController.Shared.Common.Application.HealthCheckTest do
-  alias SigninappEx.Infrastructure.EntryPoint.RestController.Shared.Common.Application.HealthCheck
+defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.HealthCheckTest do
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.HealthCheck
 
   use ExUnit.Case
 

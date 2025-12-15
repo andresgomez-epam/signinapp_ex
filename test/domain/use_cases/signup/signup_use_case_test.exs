@@ -6,7 +6,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCaseTest do
   alias SigninappEx.Domain.UseCases.Signup.SignupUseCase
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Command
   alias SigninappEx.Domain.Model.Signup.Model.SignupDto
-  alias SigninappEx.Domain.Model.Shared.Cqrs.ContextData
+  alias SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData
 
   @gateway SigninappEx.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGateway
 

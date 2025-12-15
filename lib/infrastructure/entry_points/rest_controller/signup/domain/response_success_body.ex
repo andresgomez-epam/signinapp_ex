@@ -1,4 +1,4 @@
-defmodule SigninappEx.Infrastructure.EntryPoint.Shared.ResponseSuccessBody do
+defmodule SigninappEx.Infrastructure.EntryPoints.Shared.ResponseSuccessBody do
   @moduledoc """
   Module to transform and validate the input for ResponseSuccessBody
   """

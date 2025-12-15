@@ -1,4 +1,4 @@
-defmodule SigninappEx.Domain.Model.Shared.Cqrs.ContextData do
+defmodule SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData do
   @moduledoc """
   Represent a ContextData.
   """

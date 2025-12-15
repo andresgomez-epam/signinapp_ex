@@ -29,7 +29,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.RouterController
       PlugCheckup.Options.new(
         json_encoder: Jason,
         checks:
-          SigninappEx.Infrastructure.EntryPoint.RestController.Shared.Common.Application.HealthCheck.checks()
+          SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.HealthCheck.checks()
       )
   )
 
@@ -39,7 +39,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.RouterController
 
   forward(
     @path_signup,
-    to: SigninappEx.EntryPoints.RestController.Signup.Application.SignupHandler
+    to: SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Application.SignupHandler
   )
 
   def build_response(%{status: status, body: body}, conn) do

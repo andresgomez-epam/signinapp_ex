@@ -1,4 +1,4 @@
-defmodule SigninappEx.Shared.ResponseController do
+defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseController do
   @moduledoc """
   Provides functions to build HTTP responses.
   """

@@ -1,7 +1,7 @@
-defmodule SigninappEx.EntryPoints.RestController.Signup.Infra.SignupBuild do
+defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Infra.SignupBuild do
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Command
   alias SigninappEx.Domain.Model.Signup.Model.SignupDto
-  alias SigninappEx.Domain.Model.Shared.Cqrs.ContextData
+  alias SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData
 
   def build_command_with_dto(body_data, headers) do
     with {:ok, signup_dto} <-
