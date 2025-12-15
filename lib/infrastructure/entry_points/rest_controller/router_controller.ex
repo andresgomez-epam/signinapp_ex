@@ -1,4 +1,4 @@
-defmodule SigninappEx.Infrastructure.EntryPoint.ApiRest do
+defmodule SigninappEx.Infrastructure.EntryPoints.RestController.RouterController do
   @compile if Mix.env() == :test, do: :export_all
   @moduledoc """
   Access point to the rest exposed services
@@ -20,19 +20,27 @@ defmodule SigninappEx.Infrastructure.EntryPoint.ApiRest do
   plug(Plug.Telemetry, event_prefix: [:signinapp_ex, :plug])
   plug(:dispatch)
 
+  @path_signup "/api/signup"
+
   forward(
     "/api/health",
     to: PlugCheckup,
     init_opts:
       PlugCheckup.Options.new(
         json_encoder: Jason,
-        checks: SigninappEx.Infrastructure.EntryPoint.HealthCheck.checks()
+        checks:
+          SigninappEx.Infrastructure.EntryPoint.RestController.Shared.Common.Application.HealthCheck.checks()
       )
   )
 
   get "/api/hello" do
     build_response("Hello World", conn)
   end
+
+  forward(
+    @path_signup,
+    to: SigninappEx.EntryPoints.RestController.Signup.Application.SignupHandler
+  )
 
   def build_response(%{status: status, body: body}, conn) do
     conn

@@ -1,16 +1,16 @@
-defmodule SigninappEx.Infrastructure.EntryPoint.ApiRestTets do
-  alias SigninappEx.Infrastructure.EntryPoint.ApiRest
+defmodule SigninappEx.Infrastructure.EntryPoints.RestController.RouterControllerTest do
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.RouterController
 
   use ExUnit.Case
   use Plug.Test
 
-  @opts ApiRest.init([])
+  @opts RouterController.init([])
 
-  test "test ApiRest" do
+  test "test RouterController" do
     conn =
       :get
       |> conn("/api/health", "")
-      |> ApiRest.call(@opts)
+      |> RouterController.call(@opts)
 
     assert conn.state == :sent
     # TODO: Implement mocks correctly when needed
@@ -21,7 +21,7 @@ defmodule SigninappEx.Infrastructure.EntryPoint.ApiRestTets do
     conn =
       :get
       |> conn("/api/hello", "")
-      |> ApiRest.call(@opts)
+      |> RouterController.call(@opts)
 
     assert conn.state == :sent
     assert conn.status == 200
@@ -38,7 +38,7 @@ defmodule SigninappEx.Infrastructure.EntryPoint.ApiRestTets do
     conn =
       :get
       |> conn("/api/nonexistent", "")
-      |> ApiRest.call(@opts)
+      |> RouterController.call(@opts)
 
     assert conn.state == :sent
     assert conn.status == 404
@@ -48,7 +48,7 @@ defmodule SigninappEx.Infrastructure.EntryPoint.ApiRestTets do
     conn =
       :post
       |> conn("/api/health", "")
-      |> ApiRest.call(@opts)
+      |> RouterController.call(@opts)
 
     assert conn.state == :sent
     assert conn.status in [200, 500]
@@ -60,7 +60,7 @@ defmodule SigninappEx.Infrastructure.EntryPoint.ApiRestTets do
 
       # Simulate a request to a nonexistent path
       conn = conn(:get, "/nonexistent_path")
-      conn = ApiRest.call(conn, @opts)
+      conn = RouterController.call(conn, @opts)
 
       # Verify the response
       assert conn.state == :sent
@@ -72,7 +72,7 @@ defmodule SigninappEx.Infrastructure.EntryPoint.ApiRestTets do
       Logger.configure(level: :info)
 
       conn = conn(:get, "/test_not_found/info")
-      conn = ApiRest.call(conn, @opts)
+      conn = RouterController.call(conn, @opts)
 
       assert conn.state == :sent
       assert conn.status == 404

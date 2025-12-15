@@ -1,4 +1,4 @@
-defmodule Signinapp.Model.Shared.Common.Validate.Email do
+defmodule SigninappEx.Domain.Model.Shared.Common.Validate.Email do
   @moduledoc """
   Module that represents an email that only allows valid email formats.
   """
@@ -8,21 +8,18 @@ defmodule Signinapp.Model.Shared.Common.Validate.Email do
 
   @type t :: %__MODULE__{value: String.t()}
 
-  @spec new(any()) :: {:ok, t()} | {:error, :invalid_email}
+  @spec new(String.t()) :: {:ok, t()} | {:error, :email_invalid_format}
   def new(email) when is_binary(email) do
-    if valid_email?(email) do
-      {:ok, %__MODULE__{value: email}}
-    else
-      {:error, :invalid_email}
+    case Regex.match?(@email_regex, email) do
+      true -> {:ok, %__MODULE__{value: email}}
+      false -> {:error, :email_invalid_format}
     end
   end
-  def new(_), do: {:error, :invalid_email}
+  @spec new(nil) :: {:error, :email_empty}
+  def new(nil), do: {:error, :email_empty}
+  @spec new(any()) :: {:error, :email_invalid_type}
+  def new(_), do: {:error, :email_invalid_type}
 
   @spec value(t()) :: String.t()
   def value(%__MODULE__{value: value}), do: value
-
-  @spec valid_email?(String.t()) :: boolean()
-  defp valid_email?(email) do
-    Regex.match?(@email_regex, email)
-  end
 end

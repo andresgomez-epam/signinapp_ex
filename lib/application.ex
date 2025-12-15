@@ -3,7 +3,7 @@ defmodule SigninappEx.Application do
   SigninappEx application
   """
 
-  alias SigninappEx.Infrastructure.EntryPoint.ApiRest
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.RouterController
   alias SigninappEx.Config.{AppConfig, ConfigHolder}
 
   use Application
@@ -20,7 +20,7 @@ defmodule SigninappEx.Application do
 
   defp with_plug_server(%AppConfig{enable_server: true, http_port: port}) do
     Logger.debug("Configure Http server in port #{inspect(port)}. ")
-    [{Plug.Cowboy, scheme: :http, plug: ApiRest, options: [port: port]}]
+    [{Plug.Cowboy, scheme: :http, plug: RouterController, options: [port: port]}]
   end
 
   defp with_plug_server(%AppConfig{enable_server: false}), do: []

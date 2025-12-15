@@ -1,6 +1,7 @@
-defmodule SigninappEx.Utils.DataTypeUtilsTest do
-  alias SigninappEx.Utils.DataTypeUtils
+defmodule SigninappEx.EntryPoints.RestController.Shared.Common.Application.DataTypeUtilsTest do
   use ExUnit.Case
+
+  alias SigninappEx.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils
 
   describe "normalize/1" do
     test "normalizes a struct" do

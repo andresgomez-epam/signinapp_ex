@@ -8,6 +8,10 @@ config :signinapp_ex,
   version: "0.0.1",
   custom_metrics_prefix_name: "signinapp_ex_test"
 
+config :signinapp_ex,
+  sign_up_write_gateway:
+    Signinapp.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGateway
+
 config :logger,
   level: :info
 

@@ -1,9 +1,26 @@
-defmodule SigninappEx.Utils.DataTypeUtils do
+defmodule SigninappEx.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils do
   require Logger
 
   @moduledoc """
   Provides functions for normalize data
   """
+  def normalize_headers(headers) do
+    headers
+    |> normalize()
+    |> Enum.into(%{}, fn {key, value} ->
+      {String.replace(key, "-", "_")
+       |> String.upcase()
+       |> verify_atom(), value}
+    end)
+  end
+
+  defp verify_atom(key) do
+    try do
+      String.to_existing_atom(key)
+    rescue
+      _ -> String.to_atom(key)
+    end
+  end
 
   def normalize(%{__struct__: _} = value), do: value
 

@@ -9,7 +9,19 @@ defmodule SigninappEx.MixProject do
       start_permanent: Mix.env() == :prod,
       deps: deps(),
       test_coverage: [tool: ExCoveralls],
-      preferred_cli_env: [
+      releases: [
+        signinapp_ex: [
+          include_executables_for: [:unix],
+          steps: [:assemble, :tar]
+        ]
+      ],
+      metrics: false
+    ]
+  end
+
+  def cli do
+    [
+      preferred_envs: [
         "ca.release": :test,
         "ca.sobelow.sonar": :test,
         coveralls: :test,
@@ -20,14 +32,7 @@ defmodule SigninappEx.MixProject do
         credo: :test,
         release: :prod,
         sobelow: :test
-      ],
-      releases: [
-        signinapp_ex: [
-          include_executables_for: [:unix],
-          steps: [:assemble, :tar]
-        ]
-      ],
-      metrics: false
+      ]
     ]
   end
 
@@ -49,6 +54,7 @@ defmodule SigninappEx.MixProject do
       {:poison, "~> 6.0"},
       {:cors_plug, "~> 3.0"},
       {:timex, "~> 3.7"},
+      {:uuid, "~> 1.1"},
       # Test
       {:mock, "~> 0.3", only: :test},
       {:excoveralls, "~> 0.18", only: :test},
