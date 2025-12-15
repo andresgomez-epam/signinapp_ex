@@ -1,4 +1,4 @@
-defmodule Signinapp.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGateway do
+defmodule SigninappEx.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGateway do
   require Logger
 
   # Import repo
@@ -22,8 +22,13 @@ defmodule Signinapp.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGa
         } = command
       ) do
     user_entity = %UserEntity{email: email, password: password, name: name}
-    # Persist user in in-memory store
-    :ok = UserStore.put(user_entity)
+    # Persist user in in-memory store. If duplicate, log and continue (simulate DB unique constraint behavior).
+    case UserStore.put(user_entity) do
+      {:ok, _user} -> :ok
+      {:error, :already_exists} -> Logger.warning("User already exists: #{email}")
+      {:error, reason} -> Logger.error("UserStore.put error: #{inspect(reason)}")
+      other -> Logger.debug("UserStore.put returned unexpected: #{inspect(other)}")
+    end
     Logger.info("Gateway command: #{inspect(command)}")
     Logger.info("Saved user: #{inspect(user_entity)}")
 

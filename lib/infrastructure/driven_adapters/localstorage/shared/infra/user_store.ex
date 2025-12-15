@@ -1,4 +1,5 @@
 defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.UserStore do
+  @behaviour SigninappEx.Domain.Model.Shared.Common.Model.UserStoreBehaviour
   @moduledoc """
   In-memory, concurrency-safe store for `UserEntity` values.
 
@@ -27,14 +28,16 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
     GenServer.start_link(__MODULE__, opts, name: Keyword.get(opts, :name, __MODULE__))
   end
 
-  @doc "Insert or replace a `UserEntity` keyed by email."
-  @spec put(UserEntity.t()) :: :ok
+  @doc "Insert a `UserEntity` keyed by email. Fails if the email already exists."
+  @spec put(UserEntity.t()) :: {:ok, UserEntity.t()} | {:error, :already_exists} | {:error, any()}
+  @impl true
   def put(%UserEntity{email: email} = user) when is_binary(email) do
     GenServer.call(__MODULE__, {:put, email, user})
   end
 
   @doc "Get a user by email or nil if not found."
   @spec get(String.t()) :: UserEntity.t() | nil
+  @impl true
   def get(email) when is_binary(email) do
     case :ets.lookup(@table_name, email) do
       [{^email, user}] -> user
@@ -44,6 +47,7 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
 
   @doc "List all users."
   @spec list() :: [UserEntity.t()]
+  @impl true
   def list do
     :ets.tab2list(@table_name) |> Enum.map(fn {_k, v} -> v end)
   end
@@ -54,12 +58,14 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
   The updater fun will receive the current user (or nil) and should return the new user or `{:error, reason}`.
   """
   @spec update(String.t(), (UserEntity.t() | nil -> UserEntity.t() | {:error, any()})) :: {:ok, UserEntity.t()} | {:error, any()}
+  @impl true
   def update(email, fun) when is_binary(email) and is_function(fun, 1) do
     GenServer.call(__MODULE__, {:update, email, fun})
   end
 
   @doc "Delete a user by email."
-  @spec delete(String.t()) :: :ok
+  @spec delete(String.t()) :: :ok | {:error, any()}
+  @impl true
   def delete(email) when is_binary(email) do
     GenServer.call(__MODULE__, {:delete, email})
   end
@@ -97,8 +103,13 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
 
   @impl true
   def handle_call({:put, email, user}, _from, table) do
-    :ets.insert(table, {email, user})
-    {:reply, :ok, table}
+    case :ets.lookup(table, email) do
+      [{^email, _existing}] ->
+        {:reply, {:error, :already_exists}, table}
+      [] ->
+        :ets.insert(table, {email, user})
+        {:reply, {:ok, user}, table}
+    end
   end
 
   @impl true

@@ -8,7 +8,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCaseTest do
   alias SigninappEx.Domain.Model.Signup.Model.SignupDto
   alias SigninappEx.Domain.Model.Shared.Cqrs.ContextData
 
-  @gateway Signinapp.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGateway
+  @gateway SigninappEx.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGateway
 
   describe "execute_sign_up/1" do
     test "delegates to sign_up gateway and returns its result" do

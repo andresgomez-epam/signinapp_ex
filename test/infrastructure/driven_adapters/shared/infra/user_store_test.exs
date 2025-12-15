@@ -11,7 +11,7 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
 
   test "put/get/list/delete basic ops" do
     user = %UserEntity{email: "a@example.com", password: "secret", name: "Alice"}
-    assert :ok = UserStore.put(user)
+    assert {:ok, ^user} = UserStore.put(user)
     assert %UserEntity{email: "a@example.com"} = UserStore.get("a@example.com")
     assert [^user] = UserStore.list()
 
@@ -21,7 +21,7 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
 
   test "update is atomic and validates updater return" do
     user = %UserEntity{email: "b@example.com", password: "pw", name: "Bob"}
-    assert :ok = UserStore.put(user)
+    assert {:ok, _} = UserStore.put(user)
 
     {:ok, updated} = UserStore.update("b@example.com", fn %UserEntity{} = current ->
       assert current.email == "b@example.com"
@@ -31,6 +31,9 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
     assert updated.name == "Bobby"
 
     assert {:error, {:invalid_return, _}} = UserStore.update("b@example.com", fn _ -> :not_a_user end)
+
+    # duplicate put is prevented
+    assert {:error, :already_exists} = UserStore.put(user)
   end
 
   test "concurrent writes and reads" do

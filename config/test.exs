@@ -10,7 +10,7 @@ config :signinapp_ex,
 
 config :signinapp_ex,
   sign_up_write_gateway:
-    Signinapp.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGateway
+    SigninappEx.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGateway
 
 config :logger,
   level: :info
