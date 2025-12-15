@@ -28,6 +28,7 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
       %UserEntity{current | name: "Bobby"}
     end)
 
+    assert updated.email == "b@example.com"
     assert updated.name == "Bobby"
 
     assert {:error, {:invalid_return, _}} = UserStore.update("b@example.com", fn _ -> :not_a_user end)

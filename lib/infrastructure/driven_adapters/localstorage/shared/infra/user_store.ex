@@ -103,12 +103,9 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
 
   @impl true
   def handle_call({:put, email, user}, _from, table) do
-    case :ets.lookup(table, email) do
-      [{^email, _existing}] ->
-        {:reply, {:error, :already_exists}, table}
-      [] ->
-        :ets.insert(table, {email, user})
-        {:reply, {:ok, user}, table}
+    case :ets.insert_new(table, {email, user}) do
+      true -> {:reply, {:ok, user}, table}
+      false -> {:reply, {:error, :already_exists}, table}
     end
   end
 
