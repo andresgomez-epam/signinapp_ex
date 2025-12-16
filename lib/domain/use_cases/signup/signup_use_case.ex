@@ -23,13 +23,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
           context: %ContextData{}
         } = command
       ) do
-    Logger.info("Usecase command: #{inspect(command)}")
-
-    query = %Query{
-      payload: command.payload.password.value,
-      context: command.context
-    }
-    with {:ok, :password_valid} <- SignUpValidatePassUseCase.validate_password(query),
+    with {:ok, :password_valid} <- validate_pass(command.payload, command.context),
          {:ok, :created} <- @sign_up_write_gateway.sign_up(command) do
       {:ok, %Command{command | payload: :created}}
     else
@@ -37,5 +31,15 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
         Logger.error("Signup use case error: #{inspect(reason)}")
         {:error, %Command{command | payload: reason}}
     end
+  end
+
+  @spec validate_pass(SignupDto.t(), ContextData.t()) :: {:ok, :password_valid} | {:error, :password_weak}
+  defp validate_pass(sign_up_dto, ctx) do
+    query = %Query{
+      payload: sign_up_dto.password.value,
+      context: ctx
+    }
+
+    SignUpValidatePassUseCase.validate_password(query)
   end
 end

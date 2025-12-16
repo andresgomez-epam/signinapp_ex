@@ -1,7 +1,6 @@
 defmodule SigninappEx.DrivenAdapters.Localstorage.Signup.Application.SignupWriteGateway do
   require Logger
 
-  # Import repo
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Command
   alias SigninappEx.Domain.Model.Signup.Model.SignupDto
   alias SigninappEx.Domain.Model.Shared.Common.Validate.Email
@@ -18,21 +17,19 @@ defmodule SigninappEx.DrivenAdapters.Localstorage.Signup.Application.SignupWrite
             password: %Password{value: password},
             name: %Name{value: name}
           },
-          context: %ContextData{message_id: message_id}
-        } = command
+          context: %ContextData{}
+        }
       ) do
-    Logger.info("Gateway command: #{inspect(command)}")
-
     user_entity = %UserEntity{email: email, password: password, name: name}
 
-    # Persist user in in-memory store. If duplicate, log and continue (simulate DB unique constraint behavior).
+    # Persist user in in-memory store. If duplicate, return error.
     case UserStore.put(user_entity) do
       {:ok, _user} ->
         Logger.info("Saved user: #{inspect(%{user_entity | password: "****"})}")
         {:ok, :created}
 
       {:error, :already_exists} ->
-        Logger.warning("User already exists: #{email}")
+        Logger.error("User already exists: #{email}")
         {:error, :user_already_exists}
 
       {:error, reason} ->
