@@ -9,7 +9,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signin.Infra.Sig
              Map.get(headers, :MESSAGE_ID, UUID.uuid4()),
              Map.get(headers, :X_REQUEST_ID)
            ) do
-      case SigninDto.new(body_data.email, body_data.password) do
+      case SigninDto.new(Map.get(body_data, :email), Map.get(body_data, :password)) do
         {:ok, signin_dto} -> {:ok, %Query{payload: signin_dto, context: context}}
         {:error, reason} -> {:error, %Query{payload: reason, context: context}}
       end
