@@ -31,13 +31,13 @@ defmodule SigninappEx.DrivenAdapters.Localstorage.Signup.Application.SignupWrite
         Logger.info("Saved user: #{inspect(%{user_entity | password: "****"})}")
         {:ok, :created}
 
-      {:error, :already_exists} = error ->
+      {:error, :already_exists} ->
         Logger.warning("User already exists: #{email}")
-        {:error, %Command{command | payload: :already_exists}}
+        {:error, :user_already_exists}
 
-      {:error, reason} = error ->
+      {:error, reason} ->
         Logger.error("UserStore.put error: #{inspect(reason)}")
-        {:error, %Command{command | payload: reason}}
+        {:error, reason}
     end
   end
 end
