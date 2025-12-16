@@ -15,6 +15,7 @@ defmodule SigninappEx.Domain.Model.Shared.Common.Validate.Password do
       false -> {:error, :password_weak}
     end
   end
+
   @spec new(nil) :: {:error, :password_empty}
   def new(nil), do: {:error, :password_empty}
   @spec new(any()) :: {:error, :password_invalid_type}

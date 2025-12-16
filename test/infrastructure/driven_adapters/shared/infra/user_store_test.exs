@@ -1,7 +1,10 @@
 defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.UserStoreTest do
   use ExUnit.Case, async: false
 
-  alias SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.{Infra.UserStore, Domain.UserEntity}
+  alias SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.{
+    Infra.UserStore,
+    Domain.UserEntity
+  }
 
   setup do
     # Start the store process for each test to ensure isolation
@@ -23,15 +26,17 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
     user = %UserEntity{email: "b@example.com", password: "pw", name: "Bob"}
     assert {:ok, _} = UserStore.put(user)
 
-    {:ok, updated} = UserStore.update("b@example.com", fn %UserEntity{} = current ->
-      assert current.email == "b@example.com"
-      %UserEntity{current | name: "Bobby"}
-    end)
+    {:ok, updated} =
+      UserStore.update("b@example.com", fn %UserEntity{} = current ->
+        assert current.email == "b@example.com"
+        %UserEntity{current | name: "Bobby"}
+      end)
 
     assert updated.email == "b@example.com"
     assert updated.name == "Bobby"
 
-    assert {:error, {:invalid_return, _}} = UserStore.update("b@example.com", fn _ -> :not_a_user end)
+    assert {:error, {:invalid_return, _}} =
+             UserStore.update("b@example.com", fn _ -> :not_a_user end)
 
     # duplicate put is prevented
     assert {:error, :already_exists} = UserStore.put(user)

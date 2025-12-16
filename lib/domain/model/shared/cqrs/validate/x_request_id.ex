@@ -18,6 +18,7 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.XRequestId do
       false -> {:error, :x_request_id_invalid_format}
     end
   end
+
   @spec new(nil) :: {:error, :x_request_id_empty}
   def new(nil), do: {:error, :x_request_id_empty}
   @spec new(any()) :: {:error, :x_request_id_invalid_type}

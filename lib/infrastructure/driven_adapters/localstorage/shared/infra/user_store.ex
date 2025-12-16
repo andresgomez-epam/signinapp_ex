@@ -57,7 +57,8 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
 
   The updater fun will receive the current user (or nil) and should return the new user or `{:error, reason}`.
   """
-  @spec update(String.t(), (UserEntity.t() | nil -> UserEntity.t() | {:error, any()})) :: {:ok, UserEntity.t()} | {:error, any()}
+  @spec update(String.t(), (UserEntity.t() | nil -> UserEntity.t() | {:error, any()})) ::
+          {:ok, UserEntity.t()} | {:error, any()}
   @impl true
   def update(email, fun) when is_binary(email) and is_function(fun, 1) do
     GenServer.call(__MODULE__, {:update, email, fun})
@@ -80,22 +81,34 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.Us
   @impl true
   def init(_opts) do
     # Using protected so callers that know the table can read directly, while writes go through table ops
-    table = :ets.new(@table_name, [:set, :protected, :named_table, read_concurrency: true, write_concurrency: true])
+    table =
+      :ets.new(@table_name, [
+        :set,
+        :protected,
+        :named_table,
+        read_concurrency: true,
+        write_concurrency: true
+      ])
+
     {:ok, table}
   end
 
   @impl true
   def handle_call({:update, email, fun}, _from, table) do
-    current = case :ets.lookup(table, email) do
-      [{^email, user}] -> user
-      [] -> nil
-    end
+    current =
+      case :ets.lookup(table, email) do
+        [{^email, user}] -> user
+        [] -> nil
+      end
 
     case fun.(current) do
-      {:error, _} = err -> {:reply, err, table}
+      {:error, _} = err ->
+        {:reply, err, table}
+
       %UserEntity{} = new_user ->
         :ets.insert(table, {email, new_user})
         {:reply, {:ok, new_user}, table}
+
       other ->
         {:reply, {:error, {:invalid_return, other}}, table}
     end

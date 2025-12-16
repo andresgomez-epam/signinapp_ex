@@ -17,11 +17,9 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.XRequestIdTest do
       assert req_id.value == uuid
       assert XRequestId.value(req_id) == uuid
     end
-
   end
 
   describe "Error paths" do
-
     test "rejects nil with :x_request_id_empty" do
       assert {:error, :x_request_id_empty} = XRequestId.new(nil)
     end
@@ -55,9 +53,14 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.XRequestIdTest do
     test "rejects non-binary types" do
       assert {:error, :x_request_id_invalid_type} = XRequestId.new(123)
       assert {:error, :x_request_id_invalid_type} = XRequestId.new(:uuid)
-      assert {:error, :x_request_id_invalid_type} = XRequestId.new({"550e8400-e29b-41d4-a716-446655440000"})
+
+      assert {:error, :x_request_id_invalid_type} =
+               XRequestId.new({"550e8400-e29b-41d4-a716-446655440000"})
+
       assert {:error, :x_request_id_invalid_type} = XRequestId.new(['5', '5'])
-      assert {:error, :x_request_id_invalid_type} = XRequestId.new(%{id: "550e8400-e29b-41d4-a716-446655440000"})
+
+      assert {:error, :x_request_id_invalid_type} =
+               XRequestId.new(%{id: "550e8400-e29b-41d4-a716-446655440000"})
     end
   end
 end

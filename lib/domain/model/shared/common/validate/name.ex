@@ -11,6 +11,7 @@ defmodule SigninappEx.Domain.Model.Shared.Common.Validate.Name do
   def new(name) when is_binary(name) do
     {:ok, %__MODULE__{value: name}}
   end
+
   @spec new(nil) :: {:ok, t()}
   def new(nil), do: {:ok, %__MODULE__{value: nil}}
   @spec new(any()) :: {:error, :name_invalid_type}

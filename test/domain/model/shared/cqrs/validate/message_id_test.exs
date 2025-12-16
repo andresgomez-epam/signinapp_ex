@@ -17,11 +17,9 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.MessageIdTest do
       assert msg_id.value == uuid
       assert MessageId.value(msg_id) == uuid
     end
-
   end
 
   describe "Error paths" do
-
     test "rejects nil with :message_id_empty" do
       assert {:error, :message_id_empty} = MessageId.new(nil)
     end
@@ -55,9 +53,14 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.MessageIdTest do
     test "rejects non-binary types" do
       assert {:error, :message_id_invalid_type} = MessageId.new(123)
       assert {:error, :message_id_invalid_type} = MessageId.new(:uuid)
-      assert {:error, :message_id_invalid_type} = MessageId.new({"550e8400-e29b-41d4-a716-446655440000"})
+
+      assert {:error, :message_id_invalid_type} =
+               MessageId.new({"550e8400-e29b-41d4-a716-446655440000"})
+
       assert {:error, :message_id_invalid_type} = MessageId.new(['5', '5'])
-      assert {:error, :message_id_invalid_type} = MessageId.new(%{id: "550e8400-e29b-41d4-a716-446655440000"})
+
+      assert {:error, :message_id_invalid_type} =
+               MessageId.new(%{id: "550e8400-e29b-41d4-a716-446655440000"})
     end
   end
 end

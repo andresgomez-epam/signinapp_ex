@@ -8,9 +8,11 @@ defmodule SigninappEx.Domain.Model.Shared.Common.Model.UserStoreBehaviour do
 
   alias SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Domain.UserEntity
 
-  @callback put(UserEntity.t()) :: {:ok, UserEntity.t()} | {:error, :already_exists} | {:error, any()}
+  @callback put(UserEntity.t()) ::
+              {:ok, UserEntity.t()} | {:error, :already_exists} | {:error, any()}
   @callback get(String.t()) :: UserEntity.t() | nil
   @callback list() :: [UserEntity.t()]
-  @callback update(String.t(), (UserEntity.t() | nil -> UserEntity.t() | {:error, any()})) :: {:ok, UserEntity.t()} | {:error, any()}
+  @callback update(String.t(), (UserEntity.t() | nil -> UserEntity.t() | {:error, any()})) ::
+              {:ok, UserEntity.t()} | {:error, any()}
   @callback delete(String.t()) :: :ok | {:error, any()}
 end

@@ -15,6 +15,7 @@ defmodule SigninappEx.Domain.Model.Shared.Common.Validate.Email do
       false -> {:error, :email_invalid_format}
     end
   end
+
   @spec new(nil) :: {:error, :email_empty}
   def new(nil), do: {:error, :email_empty}
   @spec new(any()) :: {:error, :email_invalid_type}

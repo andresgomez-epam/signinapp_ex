@@ -5,11 +5,12 @@ defmodule SigninappEx.Infrastructure.EntryPoints.Shared.ResponseSuccessBody do
 
   def build_response(response_body, message_id) do
     %{
-      "meta" => %{
-        "_messageId" => message_id,
-        "_requestDateTime" => get_request_date()
-      },
-      "data" => response_body
+      status: 201,
+      body: %{
+        "data" => response_body,
+        "message_id" => message_id,
+        "request_date" => get_request_date()
+      }
     }
   end
 

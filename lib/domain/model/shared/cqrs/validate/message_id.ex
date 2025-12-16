@@ -17,6 +17,7 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.MessageId do
       false -> {:error, :message_id_invalid_format}
     end
   end
+
   @spec new(nil) :: {:error, :message_id_empty}
   def new(nil), do: {:error, :message_id_empty}
   @spec new(any()) :: {:error, :message_id_invalid_type}

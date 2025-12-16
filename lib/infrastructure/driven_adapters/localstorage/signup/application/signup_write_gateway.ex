@@ -24,16 +24,20 @@ defmodule SigninappEx.DrivenAdapters.Localstorage.Signup.Application.SignupWrite
     Logger.info("Gateway command: #{inspect(command)}")
 
     user_entity = %UserEntity{email: email, password: password, name: name}
+
     # Persist user in in-memory store. If duplicate, log and continue (simulate DB unique constraint behavior).
     case UserStore.put(user_entity) do
       {:ok, _user} ->
-        :ok
-        Logger.info("Saved user: #{inspect(user_entity)}")
-      {:error, :already_exists} -> Logger.warning("User already exists: #{email}")
-      {:error, reason} -> Logger.error("UserStore.put error: #{inspect(reason)}")
-      other -> Logger.debug("UserStore.put returned unexpected: #{inspect(other)}")
-    end
+        Logger.info("Saved user: #{inspect(%{user_entity | password: "****"})}")
+        {:ok, :created}
 
-    {:ok, nil}
+      {:error, :already_exists} = error ->
+        Logger.warning("User already exists: #{email}")
+        {:error, %Command{command | payload: :already_exists}}
+
+      {:error, reason} = error ->
+        Logger.error("UserStore.put error: #{inspect(reason)}")
+        {:error, %Command{command | payload: reason}}
+    end
   end
 end

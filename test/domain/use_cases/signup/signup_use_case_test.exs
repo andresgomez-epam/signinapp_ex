@@ -14,18 +14,24 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCaseTest do
     test "delegates to sign_up gateway and returns its result" do
       {:ok, dto} = SignupDto.new("user@example.com", "StrongP@ssw0rd", "Name")
       # Use valid v4 UUIDs (MessageId expects a v4 UUID format)
-      {:ok, context} = ContextData.new("550e8400-e29b-41d4-a716-446655440000", "550e8400-e29b-41d4-a716-446655440001")
+      {:ok, context} =
+        ContextData.new(
+          "550e8400-e29b-41d4-a716-446655440000",
+          "550e8400-e29b-41d4-a716-446655440001"
+        )
 
       command = %Command{payload: dto, context: context}
 
-      with_mock @gateway, [sign_up: fn received_command ->
-        # ensure the gateway receives exactly the same command
-        assert received_command == command
-        {:ok, :created}
-      end] do
-        log = capture_log(fn ->
-          assert {:ok, :created} == SignupUseCase.execute_sign_up(command)
-        end)
+      with_mock @gateway,
+        sign_up: fn received_command ->
+          # ensure the gateway receives exactly the same command
+          assert received_command == command
+          {:ok, :created}
+        end do
+        log =
+          capture_log(fn ->
+            assert {:ok, :created} == SignupUseCase.execute_sign_up(command)
+          end)
 
         assert log =~ "Usecase command:"
       end

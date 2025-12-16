@@ -16,10 +16,10 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData do
     with {:ok, new_message_id} <- MessageId.new(message_id),
          {:ok, new_x_request_id} <- resolve_x_request_id(message_id, x_request_id) do
       {:ok,
-      %__MODULE__{
-        message_id: new_message_id,
-        x_request_id: new_x_request_id
-      }}
+       %__MODULE__{
+         message_id: new_message_id,
+         x_request_id: new_x_request_id
+       }}
     end
   end
 

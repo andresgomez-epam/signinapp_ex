@@ -11,6 +11,10 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
 
   @sign_up_write_gateway Application.compile_env!(:signinapp_ex, :sign_up_write_gateway)
 
+  @spec execute_sign_up(%Command{
+          :context => ContextData.t(),
+          :payload => SignupDto.t()
+        }) :: {:error, any()} | {:ok, :created}
   def execute_sign_up(
         %Command{
           payload: %SignupDto{},
@@ -18,7 +22,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
         } = command
       ) do
     Logger.info("Usecase command: #{inspect(command)}")
-    
+
     @sign_up_write_gateway.sign_up(command)
   end
 end
