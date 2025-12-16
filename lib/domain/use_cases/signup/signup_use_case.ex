@@ -28,7 +28,6 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
       {:ok, %Command{command | payload: :created}}
     else
       {:error, reason} ->
-        Logger.error("Signup use case error: #{inspect(reason)}")
         {:error, %Command{command | payload: reason}}
     end
   end

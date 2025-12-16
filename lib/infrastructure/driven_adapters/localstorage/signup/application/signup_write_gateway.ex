@@ -29,11 +29,9 @@ defmodule SigninappEx.DrivenAdapters.Localstorage.Signup.Application.SignupWrite
         {:ok, :created}
 
       {:error, :already_exists} ->
-        Logger.error("User already exists: #{email}")
         {:error, :user_already_exists}
 
       {:error, reason} ->
-        Logger.error("UserStore.put error: #{inspect(reason)}")
         {:error, reason}
     end
   end

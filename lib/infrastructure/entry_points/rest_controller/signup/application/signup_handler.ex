@@ -29,7 +29,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Applicati
       ResponseController.build_response(%{}, use_case_command.context, conn)
     else
       {:error, %Command{} = command_with_error} ->
-        Logger.error("SignupHandler use case error: #{inspect(command_with_error.payload)}")
+        Logger.error("SignupHandler error: #{inspect(command_with_error.payload)}")
 
         ResponseController.build_error_response(
           %{
