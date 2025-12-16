@@ -21,6 +21,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.RouterController
   plug(:dispatch)
 
   @path_signup "/api/signup"
+  @path_signin "/api/signin"
 
   forward(
     "/api/health",
@@ -40,6 +41,11 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.RouterController
   forward(
     @path_signup,
     to: SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Application.SignupHandler
+  )
+
+  forward(
+    @path_signin,
+    to: SigninappEx.Infrastructure.EntryPoints.RestController.Signin.Application.SigninHandler
   )
 
   def build_response(%{status: status, body: body}, conn) do

@@ -40,6 +40,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Ap
     ])
     |> send_resp(status, Poison.encode!(body))
   end
+
   def build_response(response, ctx, conn) when map_size(response) == 0 do
     conn
     |> put_resp_content_type("application/json")
@@ -65,16 +66,16 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Ap
     Logger.info("Building error response with status #{status} and body #{inspect(body)}")
 
     response = %{
-              error: %{
-                code: body.code,
-                message: body.message,
-                details: body.details,
-                correlation: %{
-                  message_id: ctx.message_id.value,
-                  x_request_id: ctx.x_request_id.value
-                }
-              }
-            }
+      error: %{
+        code: body.code,
+        message: body.message,
+        details: body.details,
+        correlation: %{
+          message_id: ctx.message_id.value,
+          x_request_id: ctx.x_request_id.value
+        }
+      }
+    }
 
     conn
     |> put_resp_content_type("application/json")

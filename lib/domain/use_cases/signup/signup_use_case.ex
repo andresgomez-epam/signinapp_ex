@@ -19,11 +19,11 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
         }) :: {:error, any()} | {:ok, :created}
   def execute_sign_up(
         %Command{
-          payload: %SignupDto{},
-          context: %ContextData{}
+          payload: %SignupDto{} = signup_dto,
+          context: %ContextData{} = ctx
         } = command
       ) do
-    with {:ok, :password_valid} <- validate_pass(command.payload, command.context),
+    with {:ok, :password_valid} <- validate_pass(signup_dto, ctx),
          {:ok, :created} <- @sign_up_write_gateway.sign_up(command) do
       {:ok, %Command{command | payload: :created}}
     else
@@ -32,10 +32,11 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
     end
   end
 
-  @spec validate_pass(SignupDto.t(), ContextData.t()) :: {:ok, :password_valid} | {:error, :password_weak}
-  defp validate_pass(sign_up_dto, ctx) do
+  @spec validate_pass(SignupDto.t(), ContextData.t()) ::
+          {:ok, :password_valid} | {:error, :password_weak}
+  defp validate_pass(signup_dto, ctx) do
     query = %Query{
-      payload: sign_up_dto.password.value,
+      payload: signup_dto.password.value,
       context: ctx
     }
 
