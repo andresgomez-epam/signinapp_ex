@@ -10,6 +10,10 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Signup.Applicat
   alias SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Domain.UserEntity
   alias SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Shared.Infra.UserStore
 
+  @spec sign_up(%Command{
+          :context => ContextData.t(),
+          :payload => SignupDto.t()
+        }) :: {:ok, :created} | {:error, :user_already_exists}
   def sign_up(%Command{
         payload: %SignupDto{
           email: %Email{value: email},
@@ -28,9 +32,6 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Signup.Applicat
 
       {:error, :already_exists} ->
         {:error, :user_already_exists}
-
-      {:error, reason} ->
-        {:error, reason}
     end
   end
 end

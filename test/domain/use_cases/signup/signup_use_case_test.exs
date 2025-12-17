@@ -28,12 +28,8 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCaseTest do
           assert received_command == command
           {:ok, :created}
         end do
-        log =
-          capture_log(fn ->
-            assert {:ok, :created} == SignupUseCase.execute_sign_up(command)
-          end)
-
-        assert log =~ "Usecase command:"
+        assert {:ok, %Command{payload: :created, context: context}} ==
+                 SignupUseCase.execute_sign_up(command)
       end
     end
 

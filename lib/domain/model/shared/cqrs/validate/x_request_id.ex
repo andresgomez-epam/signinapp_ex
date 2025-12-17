@@ -9,9 +9,9 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.XRequestId do
   @type t :: %__MODULE__{value: String.t()}
 
   @spec new(any()) ::
-          {:error,
-           :x_request_id_empty | :x_request_id_invalid_format | :x_request_id_invalid_type}
-          | {:ok, SigninappEx.Domain.Model.Shared.Cqrs.Validate.XRequestId.t()}
+          {:ok, t()}
+          | {:error,
+             :x_request_id_invalid_format | :x_request_id_empty | :x_request_id_invalid_type}
   def new(x_request_id) when is_binary(x_request_id) do
     case Regex.match?(@uuid_regex, x_request_id) do
       true -> {:ok, %__MODULE__{value: x_request_id}}
@@ -19,9 +19,7 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.XRequestId do
     end
   end
 
-  @spec new(nil) :: {:error, :x_request_id_empty}
   def new(nil), do: {:error, :x_request_id_empty}
-  @spec new(any()) :: {:error, :x_request_id_invalid_type}
   def new(_), do: {:error, :x_request_id_invalid_type}
 
   @spec value(t()) :: String.t()

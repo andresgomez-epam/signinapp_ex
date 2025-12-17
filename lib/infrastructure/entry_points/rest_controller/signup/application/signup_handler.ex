@@ -1,4 +1,6 @@
 defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Application.SignupHandler do
+  alias SigninappEx.Domain.Model.Shared.Exception.Exceptions
+
   alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseController
 
   alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils
@@ -16,11 +18,10 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Applicati
   @path "/"
 
   post @path do
+    Logger.debug("Ejecutando SignUP handler")
+
     headers = conn.req_headers |> DataTypeUtils.normalize_headers()
     body = conn.body_params |> DataTypeUtils.normalize()
-
-    Logger.info("Normalized headers: #{inspect(headers)}")
-    Logger.info("Normalized request body: #{inspect(body)}")
 
     with {:ok, %Command{} = init_command} <- SignupBuild.build_command_with_dto(body, headers),
          {:ok, %Command{} = use_case_command} <- SignupUseCase.execute_sign_up(init_command) do
@@ -28,17 +29,8 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Applicati
       ResponseController.build_response(%{}, use_case_command.context, conn)
     else
       {:error, %Command{} = command_with_error} ->
-        Logger.error("SignUP_Handler error: #{inspect(command_with_error.payload)}")
-
         ResponseController.build_error_response(
-          %{
-            status: 400,
-            body: %{
-              code: "SIGNUP_ERROR",
-              message: "User sign-up failed.",
-              details: command_with_error.payload
-            }
-          },
+          Exceptions.build_exception(command_with_error.payload),
           command_with_error.context,
           conn
         )

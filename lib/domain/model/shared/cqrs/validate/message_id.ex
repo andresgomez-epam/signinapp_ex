@@ -9,8 +9,8 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.MessageId do
   @type t :: %__MODULE__{value: String.t()}
 
   @spec new(any()) ::
-          {:error, :message_id_empty | :message_id_invalid_format | :message_id_invalid_type}
-          | {:ok, SigninappEx.Domain.Model.Shared.Cqrs.Validate.MessageId.t()}
+          {:ok, t()}
+          | {:error, :message_id_invalid_format | :message_id_empty | :message_id_invalid_type}
   def new(message_id) when is_binary(message_id) do
     case Regex.match?(@uuid_regex, message_id) do
       true -> {:ok, %__MODULE__{value: message_id}}
@@ -18,9 +18,7 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.MessageId do
     end
   end
 
-  @spec new(nil) :: {:error, :message_id_empty}
   def new(nil), do: {:error, :message_id_empty}
-  @spec new(any()) :: {:error, :message_id_invalid_type}
   def new(_), do: {:error, :message_id_invalid_type}
 
   @spec value(t()) :: String.t()

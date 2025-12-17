@@ -2,9 +2,6 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
   @moduledoc """
   Use case for user sign-up functionality.
   """
-
-  require Logger
-
   alias Domain.UseCases.Signup.Validatepassword.SignUpValidatePassUseCase
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Command
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Query
@@ -16,7 +13,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
   @spec execute_sign_up(%Command{
           :context => ContextData.t(),
           :payload => SignupDto.t()
-        }) :: {:error, any()} | {:ok, :created}
+        }) :: {:ok, %Query{}} | {:error, %Query{}}
   def execute_sign_up(
         %Command{
           payload: %SignupDto{} = signup_dto,

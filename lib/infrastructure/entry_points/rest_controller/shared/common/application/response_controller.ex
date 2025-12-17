@@ -2,6 +2,11 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Ap
   @moduledoc """
   Provides functions to build HTTP responses.
   """
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Infra.PrintEcsLog
+
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Domain.EcsModelResponse
+
+  alias SigninappEx.Domain.Model.Shared.Exception.Exceptions
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData
   require Logger
   import Plug.Conn
@@ -29,25 +34,29 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Ap
 
   @spec build_response(any(), ContextData.t(), Plug.Conn.t()) :: Plug.Conn.t()
   def build_response(%{status: status, body: body}, ctx, conn) do
-    Logger.info("Building response with status #{status} and body #{inspect(body)}")
+    message_id = Map.get(Map.get(ctx, :message_id), :value)
+    x_request_id = Map.get(Map.get(ctx, :x_request_id), :value)
 
     conn
     |> put_resp_content_type("application/json")
     |> merge_resp_headers(@content_security_policy)
     |> merge_resp_headers([
-      {@message_id, ctx.message_id.value},
-      {@x_request_id, ctx.x_request_id.value}
+      {@message_id, message_id},
+      {@x_request_id, x_request_id}
     ])
     |> send_resp(status, Poison.encode!(body))
   end
 
   def build_response(response, ctx, conn) when map_size(response) == 0 do
+    message_id = Map.get(Map.get(ctx, :message_id), :value)
+    x_request_id = Map.get(Map.get(ctx, :x_request_id), :value)
+
     conn
     |> put_resp_content_type("application/json")
     |> merge_resp_headers(@content_security_policy)
     |> merge_resp_headers([
-      {@message_id, ctx.message_id.value},
-      {@x_request_id, ctx.x_request_id.value}
+      {@message_id, message_id},
+      {@x_request_id, x_request_id}
     ])
     |> handle_not_results()
   end
@@ -57,22 +66,22 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Ap
     build_response(%{status: 200, body: response}, ctx, conn)
   end
 
-  @spec build_error_response(any(), ContextData.t(), Plug.Conn.t()) :: Plug.Conn.t()
-  def build_error_response(
-        %{status: status, body: body},
-        ctx,
-        conn
-      ) do
-    Logger.info("Building error response with status #{status} and body #{inspect(body)}")
+  @spec build_error_response(Exceptions.t(), ContextData.t(), Plug.Conn.t()) :: Plug.Conn.t()
+  def build_error_response(%Exceptions{} = exception, ctx, conn) do
+    message_id = Map.get(Map.get(ctx, :message_id), :value)
+    x_request_id = Map.get(Map.get(ctx, :x_request_id), :value)
+
+    EcsModelResponse.build_structure(exception, message_id, conn)
+    |> PrintEcsLog.print_ecs_log()
 
     response = %{
       error: %{
-        code: body.code,
-        message: body.message,
-        details: body.details,
+        code: Map.get(exception, :code),
+        message: Map.get(exception, :detail),
+        details: Map.get(exception, :category),
         correlation: %{
-          message_id: ctx.message_id.value,
-          x_request_id: ctx.x_request_id.value
+          message_id: message_id,
+          x_request_id: x_request_id
         }
       }
     }
@@ -81,10 +90,10 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Ap
     |> put_resp_content_type("application/json")
     |> merge_resp_headers(@content_security_policy)
     |> merge_resp_headers([
-      {@message_id, ctx.message_id.value},
-      {@x_request_id, ctx.x_request_id.value}
+      {@message_id, message_id},
+      {@x_request_id, x_request_id}
     ])
-    |> send_resp(status, Poison.encode!(response))
+    |> send_resp(Map.get(exception, :status, 500), Poison.encode!(response))
   end
 
   defp handle_not_results(conn) do

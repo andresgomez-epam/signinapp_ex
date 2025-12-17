@@ -3,6 +3,25 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Infra.Sig
   alias SigninappEx.Domain.Model.Signup.Model.SignupDto
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData
 
+  @spec build_command_with_dto(any(), map()) ::
+          {:ok, %Command{context: ContextData.t(), payload: SignupDto.t()}}
+          | {:error,
+             :message_id_empty
+             | :message_id_invalid_format
+             | :message_id_invalid_type
+             | :x_request_id_empty
+             | :x_request_id_invalid_format
+             | :x_request_id_invalid_type
+             | %Command{
+                 context: ContextData.t(),
+                 payload:
+                   :email_empty
+                   | :email_invalid_format
+                   | :email_invalid_type
+                   | :name_invalid_type
+                   | :password_empty
+                   | :password_invalid_type
+               }}
   def build_command_with_dto(body_data, headers) do
     with {:ok, context} <-
            ContextData.new(

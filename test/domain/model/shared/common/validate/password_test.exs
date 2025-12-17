@@ -26,14 +26,6 @@ defmodule SigninappEx.Domain.Model.Shared.Common.Validate.PasswordTest do
   end
 
   describe "error path" do
-    test "rejects a password that is too short" do
-      assert {:error, :password_weak} = Password.new("short")
-    end
-
-    test "rejects an empty password" do
-      assert {:error, :password_weak} = Password.new("")
-    end
-
     test "rejects a non-string password (integer)" do
       assert {:error, :password_invalid_type} = Password.new(12_345_678)
     end

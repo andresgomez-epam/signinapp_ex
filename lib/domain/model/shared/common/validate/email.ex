@@ -8,7 +8,8 @@ defmodule SigninappEx.Domain.Model.Shared.Common.Validate.Email do
 
   @type t :: %__MODULE__{value: String.t()}
 
-  @spec new(String.t()) :: {:ok, t()} | {:error, :email_invalid_format}
+  @spec new(any()) ::
+          {:ok, t()} | {:error, :email_invalid_format | :email_empty | :email_invalid_type}
   def new(email) when is_binary(email) do
     case Regex.match?(@email_regex, email) do
       true -> {:ok, %__MODULE__{value: email}}
@@ -16,9 +17,7 @@ defmodule SigninappEx.Domain.Model.Shared.Common.Validate.Email do
     end
   end
 
-  @spec new(nil) :: {:error, :email_empty}
   def new(nil), do: {:error, :email_empty}
-  @spec new(any()) :: {:error, :email_invalid_type}
   def new(_), do: {:error, :email_invalid_type}
 
   @spec value(t()) :: String.t()

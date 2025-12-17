@@ -3,10 +3,11 @@ defmodule Domain.UseCases.Signup.Validatepassword.SignUpValidatePassUseCase do
   Use case for validating a password during sign-up.
   """
 
+  alias SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Query
 
   @spec validate_password(%Query{
-          :context => any(),
+          :context => ContextData.t(),
           :payload => binary()
         }) :: {:ok, :password_valid} | {:error, :password_weak}
   def validate_password(%Query{payload: password, context: _context}) when is_binary(password) do
