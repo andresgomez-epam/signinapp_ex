@@ -1,16 +1,14 @@
 defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Application.SignupHandler do
-  alias SigninappEx.Domain.Model.Shared.Exception.Exceptions
-
-  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseController
-
-  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils
-
-  alias SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Infra.SignupBuild
-  alias SigninappEx.Domain.UseCases.Signup.SignupUseCase
-  alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Command
-
   use Plug.Router
   require Logger
+
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseErrorController
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseController
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Infra.SignupBuild
+  alias SigninappEx.Domain.Model.Shared.Exception.Exceptions
+  alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Command
+  alias SigninappEx.Domain.UseCases.Signup.SignupUseCase
 
   plug(:match)
   plug(:dispatch)
@@ -29,7 +27,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Applicati
       ResponseController.build_response(%{}, use_case_command.context, conn)
     else
       {:error, %Command{} = command_with_error} ->
-        ResponseController.build_error_response(
+        ResponseErrorController.build_error_response(
           Exceptions.build_exception(command_with_error.payload),
           command_with_error.context,
           conn

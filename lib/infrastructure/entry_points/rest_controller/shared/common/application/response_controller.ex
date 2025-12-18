@@ -2,14 +2,11 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Ap
   @moduledoc """
   Provides functions to build HTTP responses.
   """
-  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Infra.PrintEcsLog
+  import Plug.Conn
 
   alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Domain.EcsModelResponse
-
-  alias SigninappEx.Domain.Model.Shared.Exception.Exceptions
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Infra.PrintEcsLog
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData
-  require Logger
-  import Plug.Conn
 
   @content_security_policy [
     {"cache-control", "no-cache, no-store, must-revalidate"},
@@ -76,37 +73,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Ap
   end
 
   @spec build_ok_response(any(), ContextData.t(), Plug.Conn.t()) :: Plug.Conn.t()
-  def build_ok_response(response, ctx, conn) do
-    build_response(%{status: {200, "OK"}, body: response}, ctx, conn)
-  end
-
-  @spec build_error_response(Exceptions.t(), ContextData.t(), Plug.Conn.t()) :: Plug.Conn.t()
-  def build_error_response(%Exceptions{} = exception, ctx, conn) do
-    message_id = Map.get(Map.get(ctx, :message_id), :value)
-    x_request_id = Map.get(Map.get(ctx, :x_request_id), :value)
-
-    EcsModelResponse.build_structure(exception, message_id, conn)
-    |> PrintEcsLog.print_ecs_log_error()
-
-    response = %{
-      error: %{
-        code: Map.get(exception, :code),
-        message: Map.get(exception, :detail),
-        details: Map.get(exception, :category),
-        correlation: %{
-          message_id: message_id,
-          x_request_id: x_request_id
-        }
-      }
-    }
-
-    conn
-    |> put_resp_content_type("application/json")
-    |> merge_resp_headers(@content_security_policy)
-    |> merge_resp_headers([
-      {@message_id, message_id},
-      {@x_request_id, x_request_id}
-    ])
-    |> send_resp(Map.get(exception, :status, 500), Poison.encode!(response))
+  def build_ok_response(body, ctx, conn) do
+    build_response(%{status: {200, "OK"}, body: body}, ctx, conn)
   end
 end
