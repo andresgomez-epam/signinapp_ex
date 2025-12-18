@@ -27,10 +27,12 @@ defmodule SigninappEx.Domain.UseCases.Signin.SigninUseCaseTest do
 
       with_mock SigninSearchUserUseCase,
         search_user: fn received_query ->
+          # ensure the sub use case receives exactly the same query
           assert received_query == query
           {:ok, user_dto}
         end do
         with_mock @signin_write_gateway,
+          # ensure the gateway receives exactly the same query
           sign_in: fn received_query ->
             assert received_query == query
             {:ok, %Query{payload: "some-uuid", context: context}}
