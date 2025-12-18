@@ -32,7 +32,7 @@ defmodule SigninappEx.Domain.Model.Shared.Exception.Exceptions do
   }
 
   @detail %{
-    ER400_00: "Email inválido.",
+    ER400_00: "Email con formato inválido.",
     ER400_01: "El password no cumple con los requisitos de seguridad.",
     ER400_02: "El request recibido está mal formado o faltan campos requeridos.",
     ER401_00: "Las credenciales proporcionadas son incorrectas.",
