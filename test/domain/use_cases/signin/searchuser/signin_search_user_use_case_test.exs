@@ -1,5 +1,5 @@
 defmodule SigninappEx.Domain.UseCases.Signin.Searchuser.SigninSearchUserUseCaseTest do
-  use ExUnit.Case, async: true
+  use ExUnit.Case, async: false
   import Mock
 
   alias SigninappEx.Domain.UseCases.Signin.Searchuser.SigninSearchUserUseCase
