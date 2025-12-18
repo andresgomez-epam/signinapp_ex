@@ -11,6 +11,14 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.In
     |> DataTypeUtils.mask_password()
     |> Poison.encode!()
     |> DataTypeUtils.normalize()
+    |> Logger.info()
+  end
+
+  def print_ecs_log_error(log) do
+    log
+    |> DataTypeUtils.mask_password()
+    |> Poison.encode!()
+    |> DataTypeUtils.normalize()
     |> Logger.error()
   end
 end

@@ -2,9 +2,13 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Do
   @moduledoc """
   This module is responsible for building responses.
   """
+  alias SigninappEx.Domain.Model.Shared.Exception.Exceptions
+
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils
 
   @service_name "signinapp_ex"
   @level_error "ERROR"
+  @level_info "INFO"
 
   @derive Jason.Encoder
   defstruct [
@@ -16,7 +20,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Do
     :error
   ]
 
-  def build_structure(data, message_id, conn) do
+  def build_structure(%Exceptions{} = data, message_id, conn) do
     now = DateTime.utc_now() |> Timex.to_datetime("America/Bogota")
 
     %__MODULE__{
@@ -26,6 +30,19 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Do
       level: @level_error,
       error: build_error(data),
       additionalInfo: build_additional_info(conn)
+    }
+  end
+
+  def build_structure(data, message_id, conn) do
+    now = DateTime.utc_now() |> Timex.to_datetime("America/Bogota")
+
+    %__MODULE__{
+      messageId: message_id,
+      date: format_datetime(now),
+      service: @service_name,
+      level: @level_info,
+      error: nil,
+      additionalInfo: build_additional_info(data, conn)
     }
   end
 
@@ -50,6 +67,20 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Do
       method: Map.get(conn, :method),
       uri: Map.get(conn, :request_path),
       requestBody: Map.get(conn, :body_params, %{})
+    }
+  end
+
+  def build_additional_info(data, conn) do
+    headers = conn.resp_headers |> DataTypeUtils.normalize_headers()
+
+    %{
+      method: Map.get(conn, :method),
+      uri: Map.get(conn, :request_path),
+      requestBody: Map.get(conn, :body_params, %{}),
+      responseBody: Map.get(data, :body),
+      responseCode: elem(Map.get(data, :status), 0),
+      responseResult: elem(Map.get(data, :status), 1),
+      headers: headers
     }
   end
 

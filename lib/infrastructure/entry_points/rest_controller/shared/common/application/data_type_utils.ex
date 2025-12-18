@@ -8,11 +8,13 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Ap
   def mask_password(input) when is_struct(input) do
     input |> Map.from_struct() |> mask_password()
   end
+
   def mask_password(input) when is_map(input) do
     Enum.into(input, %{}, fn {key, value} ->
       {key, mask_value(key, value)}
     end)
   end
+
   def mask_password(item), do: item
 
   defp mask_value(key, _value) when key in [:password, "password"], do: "****"
