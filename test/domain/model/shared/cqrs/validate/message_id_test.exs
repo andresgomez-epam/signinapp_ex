@@ -57,7 +57,7 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.MessageIdTest do
       assert {:error, :message_id_invalid_type} =
                MessageId.new({"550e8400-e29b-41d4-a716-446655440000"})
 
-      assert {:error, :message_id_invalid_type} = MessageId.new(['5', '5'])
+      assert {:error, :message_id_invalid_type} = MessageId.new(["5", "5"])
 
       assert {:error, :message_id_invalid_type} =
                MessageId.new(%{id: "550e8400-e29b-41d4-a716-446655440000"})

@@ -31,7 +31,7 @@ defmodule SigninappEx.Domain.Model.Shared.Common.Validate.NameTest do
     end
 
     test "rejects a non-string name (list)" do
-      assert {:error, :name_invalid_type} = Name.new(['J', 'o', 'h', 'n'])
+      assert {:error, :name_invalid_type} = Name.new(["J", "o", "h", "n"])
     end
   end
 end

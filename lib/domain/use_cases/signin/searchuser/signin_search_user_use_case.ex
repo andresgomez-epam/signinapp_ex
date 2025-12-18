@@ -19,5 +19,4 @@ defmodule SigninappEx.Domain.UseCases.Signin.Searchuser.SigninSearchUserUseCase 
   def search_user(%Query{} = query) do
     @signin_read_gateway.search_user(query)
   end
-
 end

@@ -160,7 +160,7 @@ defmodule SigninappEx.Domain.Model.Shared.Common.Validate.EmailTest do
     end
 
     test "rejects list" do
-      assert {:error, :email_invalid_type} = Email.new(['user', '@', 'example.com'])
+      assert {:error, :email_invalid_type} = Email.new(["user", "@", "example.com"])
     end
 
     test "rejects map" do

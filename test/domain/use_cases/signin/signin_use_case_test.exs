@@ -14,6 +14,7 @@ defmodule SigninappEx.Domain.UseCases.Signin.SigninUseCaseTest do
   describe "execute_signin/1" do
     test "happy path: valid signin" do
       {:ok, signin_dto} = SigninDto.new("user@example.com", "StrongP@ssw0rd")
+
       {:ok, context} =
         ContextData.new(
           "550e8400-e29b-41d4-a716-446655440010",
@@ -37,13 +38,15 @@ defmodule SigninappEx.Domain.UseCases.Signin.SigninUseCaseTest do
             assert received_query == query
             {:ok, %Query{payload: "some-uuid", context: context}}
           end do
-          assert {:ok, %Query{payload: "some-uuid", context: ^context}} = SigninUseCase.execute_signin(query)
+          assert {:ok, %Query{payload: "some-uuid", context: ^context}} =
+                   SigninUseCase.execute_signin(query)
         end
       end
     end
 
     test "user does not exist" do
       {:ok, signin_dto} = SigninDto.new("noone@example.com", "StrongP@ssw0rd")
+
       {:ok, context} =
         ContextData.new(
           "550e8400-e29b-41d4-a716-446655440012",
@@ -57,12 +60,14 @@ defmodule SigninappEx.Domain.UseCases.Signin.SigninUseCaseTest do
           assert received_query == query
           {:error, :user_not_found}
         end do
-        assert {:error, %Query{payload: :user_not_found, context: ^context}} = SigninUseCase.execute_signin(query)
+        assert {:error, %Query{payload: :user_not_found, context: ^context}} =
+                 SigninUseCase.execute_signin(query)
       end
     end
 
     test "invalid credentials" do
       {:ok, signin_dto} = SigninDto.new("user@example.com", "WrongPassword")
+
       {:ok, context} =
         ContextData.new(
           "550e8400-e29b-41d4-a716-446655440014",
@@ -79,7 +84,8 @@ defmodule SigninappEx.Domain.UseCases.Signin.SigninUseCaseTest do
           assert received_query == query
           {:ok, user_dto}
         end do
-        assert {:error, %Query{payload: :invalid_credentials, context: ^context}} = SigninUseCase.execute_signin(query)
+        assert {:error, %Query{payload: :invalid_credentials, context: ^context}} =
+                 SigninUseCase.execute_signin(query)
       end
     end
   end

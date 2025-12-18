@@ -1,7 +1,6 @@
 defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCaseTest do
   use ExUnit.Case, async: true
   import Mock
-  import ExUnit.CaptureLog
 
   alias SigninappEx.Domain.UseCases.Signup.SignupUseCase
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Command
@@ -13,6 +12,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCaseTest do
   describe "execute_sign_up/1" do
     test "happy path: valid signup" do
       {:ok, signup_dto} = SignupDto.new("user@example.com", "StrongP@ssw0rd", "Name")
+
       {:ok, context} =
         ContextData.new(
           "550e8400-e29b-41d4-a716-446655440000",
@@ -34,6 +34,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCaseTest do
 
     test "returns error when email already exists" do
       {:ok, signup_dto} = SignupDto.new("user@example.com", "StrongP@ssw0rd", "Name")
+
       {:ok, context} =
         ContextData.new(
           "550e8400-e29b-41d4-a716-446655440000",
@@ -53,11 +54,13 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCaseTest do
     end
 
     test "invalid email returns signup_dto construction error" do
-      assert {:error, :email_invalid_format} = SignupDto.new("userexample.com", "StrongP@ssw0rd", "Name")
+      assert {:error, :email_invalid_format} =
+               SignupDto.new("userexample.com", "StrongP@ssw0rd", "Name")
     end
 
     test "returns error when password is weak" do
       {:ok, signup_dto} = SignupDto.new("user@example.com", "weak", "Name")
+
       {:ok, context} =
         ContextData.new(
           "550e8400-e29b-41d4-a716-446655440000",
@@ -67,7 +70,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCaseTest do
       command = %Command{payload: signup_dto, context: context}
 
       with_mock SigninappEx.Domain.UseCases.Signup.Validatepassword.SignUpValidatePassUseCase,
-        [validate_password: fn _ -> {:error, :password_weak} end] do
+        validate_password: fn _ -> {:error, :password_weak} end do
         assert {:error, %Command{payload: :password_weak, context: context}} ==
                  SignupUseCase.execute_sign_up(command)
       end

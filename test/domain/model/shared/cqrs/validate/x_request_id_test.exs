@@ -57,7 +57,7 @@ defmodule SigninappEx.Domain.Model.Shared.Cqrs.Validate.XRequestIdTest do
       assert {:error, :x_request_id_invalid_type} =
                XRequestId.new({"550e8400-e29b-41d4-a716-446655440000"})
 
-      assert {:error, :x_request_id_invalid_type} = XRequestId.new(['5', '5'])
+      assert {:error, :x_request_id_invalid_type} = XRequestId.new(["5", "5"])
 
       assert {:error, :x_request_id_invalid_type} =
                XRequestId.new(%{id: "550e8400-e29b-41d4-a716-446655440000"})

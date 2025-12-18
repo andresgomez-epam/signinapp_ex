@@ -35,7 +35,7 @@ defmodule SigninappEx.Domain.Model.Shared.Common.Validate.PasswordTest do
     end
 
     test "rejects a non-string password (list)" do
-      assert {:error, :password_invalid_type} = Password.new(['p', 'a', 's', 's'])
+      assert {:error, :password_invalid_type} = Password.new(["p", "a", "s", "s"])
     end
   end
 end

@@ -13,6 +13,7 @@ defmodule SigninappEx.Domain.UseCases.Signin.Searchuser.SigninSearchUserUseCaseT
   describe "search_user/1" do
     test "returns user when gateway finds user" do
       {:ok, signin_dto} = SigninDto.new("user@example.com", "StrongP@ssw0rd")
+
       {:ok, context} =
         ContextData.new(
           "550e8400-e29b-41d4-a716-446655440000",
@@ -34,6 +35,7 @@ defmodule SigninappEx.Domain.UseCases.Signin.Searchuser.SigninSearchUserUseCaseT
 
     test "returns error when user not found" do
       {:ok, signin_dto} = SigninDto.new("noone@example.com", "StrongP@ssw0rd")
+
       {:ok, context} =
         ContextData.new(
           "550e8400-e29b-41d4-a716-446655440002",
