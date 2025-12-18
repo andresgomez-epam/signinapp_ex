@@ -4,6 +4,22 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Ap
   @moduledoc """
   Provides functions for normalize data
   """
+
+  def mask_password(input) when is_struct(input) do
+    input |> Map.from_struct() |> mask_password()
+  end
+  def mask_password(input) when is_map(input) do
+    Enum.into(input, %{}, fn {key, value} ->
+      {key, mask_value(key, value)}
+    end)
+  end
+  def mask_password(item), do: item
+
+  defp mask_value(key, _value) when key in [:password, "password"], do: "****"
+  defp mask_value(_key, value) when is_map(value), do: mask_password(value)
+  defp mask_value(_key, value) when is_list(value), do: Enum.map(value, &mask_password/1)
+  defp mask_value(_key, value), do: value
+
   def normalize_headers(headers) do
     headers
     |> normalize()

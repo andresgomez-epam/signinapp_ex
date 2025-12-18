@@ -25,7 +25,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Do
       service: @service_name,
       level: @level_error,
       error: build_error(data),
-      additionalInfo: build_additional_info(data, conn)
+      additionalInfo: build_additional_info(conn)
     }
   end
 
@@ -45,7 +45,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Do
     }
   end
 
-  def build_additional_info(data, conn) do
+  def build_additional_info(conn) do
     %{
       method: Map.get(conn, :method),
       uri: Map.get(conn, :request_path),

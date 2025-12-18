@@ -2,6 +2,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Ap
   @moduledoc """
   Provides functions to build HTTP responses.
   """
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils
   alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Infra.PrintEcsLog
 
   alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Domain.EcsModelResponse
