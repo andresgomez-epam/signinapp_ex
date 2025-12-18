@@ -94,9 +94,3 @@ Main application options are in `config/*.exs`:
 
 ## 📚 Reference
 - Programming manifesto used as guideline: [Manifesto de programación (Elixir)](https://bancolombia.sharepoint.com.mcas.ms/:w:/r/teams/EVC2.0AUTENTICACINYMONITOREO/_layouts/15/doc2.aspx?sourcedoc=%7B69DC9D32-5F22-466C-AFAC-283B55ADD4E1%7D&file=Manifiesto-programacion-%20elixir-v1.docx&fromShare=true&action=default&mobileredirect=true)
-
----
-
-If you'd like, I can also:
-- Add an example `docker-compose` or Dockerfile usage snippet, or
-- Add a `LICENSE` file (MIT/Apache) and CI workflow (GitHub Actions) — tell me which one and I can create it.
