@@ -85,7 +85,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Do
   end
 
   defp format_datetime(datetime) do
-    "#{datetime.year}/#{datetime.month}/#{datetime.day} #{pad_zero(datetime.hour)}:#{pad_zero(datetime.minute)}:#{pad_zero(datetime.second)}:#{elem(datetime.microsecond, 0)}"
+    "#{datetime.year}/#{pad_zero(datetime.month)}/#{pad_zero(datetime.day)} #{pad_zero(datetime.hour)}:#{pad_zero(datetime.minute)}:#{pad_zero(datetime.second)}:#{elem(datetime.microsecond, 0)}"
   end
 
   defp pad_zero(value) when value < 10, do: "0#{value}"
