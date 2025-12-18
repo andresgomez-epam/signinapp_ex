@@ -1,4 +1,4 @@
-defmodule Domain.UseCases.Signup.Validatepassword.SignUpValidatePassUseCase do
+defmodule SigninappEx.Domain.UseCases.Signup.Validatepassword.SignUpValidatePassUseCase do
   @moduledoc """
   Use case for validating a password during sign-up.
   """

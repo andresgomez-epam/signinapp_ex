@@ -2,7 +2,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.SignupUseCase do
   @moduledoc """
   Use case for user sign-up functionality.
   """
-  alias Domain.UseCases.Signup.Validatepassword.SignUpValidatePassUseCase
+  alias SigninappEx.Domain.UseCases.Signup.Validatepassword.SignUpValidatePassUseCase
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Command
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Query
   alias SigninappEx.Domain.Model.Signup.Model.SignupDto
