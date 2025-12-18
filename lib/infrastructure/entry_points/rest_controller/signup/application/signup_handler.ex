@@ -2,8 +2,8 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Applicati
   use Plug.Router
   require Logger
 
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseSuccessController
   alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseErrorController
-  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseController
   alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils
   alias SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Infra.SignupBuild
   alias SigninappEx.Domain.Model.Shared.Exception.Exceptions
@@ -24,7 +24,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Applicati
     with {:ok, %Command{} = init_command} <- SignupBuild.build_command_with_dto(body, headers),
          {:ok, %Command{} = use_case_command} <- SignupUseCase.execute_sign_up(init_command) do
       # Return 201 with no body
-      ResponseController.build_response(%{}, use_case_command.context, conn)
+      ResponseSuccessController.build_response(%{}, use_case_command.context, conn)
     else
       {:error, %Command{} = command_with_error} ->
         ResponseErrorController.build_error_response(

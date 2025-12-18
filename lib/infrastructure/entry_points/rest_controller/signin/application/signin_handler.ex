@@ -2,8 +2,8 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signin.Applicati
   use Plug.Router
   require Logger
 
+  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseSuccessController
   alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseErrorController
-  alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.ResponseController
   alias SigninappEx.Infrastructure.EntryPoints.RestController.Shared.Common.Application.DataTypeUtils
   alias SigninappEx.Infrastructure.EntryPoints.RestController.Signin.Infra.SigninBuild
   alias SigninappEx.Domain.Model.Shared.Exception.Exceptions
@@ -24,7 +24,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signin.Applicati
          {:ok, %Query{} = use_case_query} <- SigninUseCase.execute_signin(init_query) do
       # Return 200 with no body
       response = %{session_id: use_case_query.payload}
-      ResponseController.build_ok_response(response, use_case_query.context, conn)
+      ResponseSuccessController.build_ok_response(response, use_case_query.context, conn)
     else
       {:error, %Query{} = query_with_error} ->
         ResponseErrorController.build_error_response(
