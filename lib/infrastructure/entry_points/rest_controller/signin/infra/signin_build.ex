@@ -1,4 +1,9 @@
 defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signin.Infra.SigninBuild do
+  @moduledoc """
+  Build Query objects for Sign-In use case from HTTP request data.
+  """
+  require Logger
+  
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Query
   alias SigninappEx.Domain.Model.Signin.Model.SigninDto
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData
@@ -22,6 +27,8 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signin.Infra.Sig
                    | :password_invalid_type
                }}
   def build_query_with_dto(body_data, headers) do
+    Logger.debug("Ejecutando SignINBuild build_query_with_dto")
+
     with {:ok, context} <-
            ContextData.new(
              Map.get(headers, :MESSAGE_ID, UUID.uuid4()),

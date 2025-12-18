@@ -16,7 +16,7 @@ defmodule SigninappEx.Infrastructure.EntryPoints.RestController.Signup.Applicati
   @path "/"
 
   post @path do
-    Logger.debug("Ejecutando SignUP handler")
+    Logger.debug("Ejecutando SignUPHandler")
 
     headers = conn.req_headers |> DataTypeUtils.normalize_headers()
     body = conn.body_params |> DataTypeUtils.normalize()

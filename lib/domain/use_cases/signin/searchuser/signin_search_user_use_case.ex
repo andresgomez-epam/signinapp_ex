@@ -2,6 +2,7 @@ defmodule SigninappEx.Domain.UseCases.Signin.Searchuser.SigninSearchUserUseCase 
   @moduledoc """
   Use case for searching a user during sign-in.
   """
+  require Logger
 
   alias SigninappEx.Domain.Model.Shared.Common.Model.UserDto
   alias SigninappEx.Domain.Model.Signin.Model.SigninDto
@@ -17,6 +18,8 @@ defmodule SigninappEx.Domain.UseCases.Signin.Searchuser.SigninSearchUserUseCase 
           {:ok, UserDto.t()}
           | {:error, :user_not_found}
   def search_user(%Query{} = query) do
+    Logger.debug("Ejecutando SignINSearchUserUseCase search_user")
+
     @signin_read_gateway.search_user(query)
   end
 end

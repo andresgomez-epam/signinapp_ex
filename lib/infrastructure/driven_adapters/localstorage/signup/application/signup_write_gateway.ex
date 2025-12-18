@@ -22,12 +22,13 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Signup.Applicat
         },
         context: %ContextData{}
       }) do
+    Logger.debug("Ejecutando SignUPWriteGateway sign_up")
+
     user_entity = %UserEntity{email: email, password: password, name: name}
 
     # Persist user in in-memory store. If duplicate, return error.
     case UserStore.put(user_entity) do
       {:ok, _user} ->
-        Logger.info("Saved user: #{inspect(%{user_entity | password: "****"})}")
         {:ok, :created}
 
       {:error, :already_exists} ->

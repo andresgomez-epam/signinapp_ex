@@ -2,6 +2,7 @@ defmodule SigninappEx.Domain.UseCases.Signin.SigninUseCase do
   @moduledoc """
   Use case for user sign-in functionality.
   """
+  require Logger
 
   alias SigninappEx.Domain.UseCases.Signin.Searchuser.SigninSearchUserUseCase
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData
@@ -17,6 +18,8 @@ defmodule SigninappEx.Domain.UseCases.Signin.SigninUseCase do
           {:ok, %Query{payload: UUID.t(), context: ContextData.t()}}
           | {:error, %Query{payload: any(), context: ContextData.t()}}
   def execute_signin(%Query{} = query) do
+    Logger.debug("Ejecutando SignINUseCase execute_signin")
+
     with {:ok, user} <- SigninSearchUserUseCase.search_user(query),
          {:ok, :password_match} <- check_password(user, query),
          {:ok, result} <- @signin_write_gateway.sign_in(query) do
@@ -28,6 +31,8 @@ defmodule SigninappEx.Domain.UseCases.Signin.SigninUseCase do
   end
 
   defp check_password(user, query) do
+    Logger.debug("Ejecutando SignINUseCase check_password")
+
     if user.password.value === query.payload.password.value do
       {:ok, :password_match}
     else

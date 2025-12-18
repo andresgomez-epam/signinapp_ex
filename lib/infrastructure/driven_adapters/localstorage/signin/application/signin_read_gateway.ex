@@ -13,7 +13,6 @@ defmodule SigninappEx.Infrastructure.DrivenAdapters.Localstorage.Signin.Applicat
   def search_user(%Query{} = query) do
     case UserStore.get(query.payload.email.value) do
       nil ->
-        Logger.warning("User not found: #{inspect(query.payload.email.value)}")
         {:error, :user_not_found}
 
       user_entity ->

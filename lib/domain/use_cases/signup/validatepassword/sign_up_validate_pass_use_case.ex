@@ -2,6 +2,7 @@ defmodule SigninappEx.Domain.UseCases.Signup.Validatepassword.SignUpValidatePass
   @moduledoc """
   Use case for validating a password during sign-up.
   """
+  require Logger
 
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.ContextData
   alias SigninappEx.Domain.Model.Shared.Cqrs.Model.Query
@@ -11,6 +12,8 @@ defmodule SigninappEx.Domain.UseCases.Signup.Validatepassword.SignUpValidatePass
           :payload => binary()
         }) :: {:ok, :password_valid} | {:error, :password_weak}
   def validate_password(%Query{payload: password, context: _context}) when is_binary(password) do
+    Logger.debug("Ejecutando SignUpUseCaseValidatePassUseCase validate_password")
+
     case strong_pass?(password) do
       true -> {:ok, :password_valid}
       false -> {:error, :password_weak}
